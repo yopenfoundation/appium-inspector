@@ -18,6 +18,8 @@ jobs:
         with:
           node-version: lts/*
           cache: 'npm'
+      - name: Use npm 12
+        run: npm install --global npm@12.2.1
       - name: Install Dependencies
         run: npm ci
       - name: Lint

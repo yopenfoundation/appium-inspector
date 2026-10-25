@@ -38,7 +38,7 @@ export default defineConfig(({command}) => {
   };
   // workaround to prevent webdriver from bundling various Node.js imports
   if (command === 'build') {
-    commonConfig.define = {...commonConfig.define, 'globalThis.window': true};
+    commonConfig.define = {...commonConfig.define, 'globalThis.window': true, 'globalThis.process': false};
   }
   return commonConfig;
 });
