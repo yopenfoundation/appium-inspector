@@ -45,6 +45,20 @@ The integration includes session ownership, verified locator candidates, manual 
 adoption, and the selected-element explorer with contextual XPath proposals.
 See [embedded mode](docs/embedded-mode.md) for the protocol and host contract.
 
+Development uses npm 12.2.1 with Node.js 22.22.2+, 24.15.0+ or 26+. Install
+the compatible Node.js version first, then run `npm install --global npm@12.2.1`.
+The lockfile and scoped overrides are validated with that npm toolchain.
+The WebDriver 10 dependency uses the maintained browser download tooling and no longer
+pulls in the unmaintained `extract-zip` package. Run `npm run security:audit` to check
+both runtime and development dependencies; pull requests and main builds reject
+high or critical advisories. The scoped overrides keep `@appium/support` on
+`shell-quote` 1.11.0 and `@appium/base-driver` on `body-parser` 2.4.0 while those
+parents still pin affected releases. Remove each override when its parent adopts
+a corrected version, then repeat the audit, integration tests and builds.
+Install scripts are explicitly allowed for Appium, the Windows packager and
+the macOS file watcher. Browser-driver downloads are disabled; Inspector attaches
+to an existing Appium server. The root postinstall installs Electron explicitly.
+
 When updating this fork, run `npm ci`, `npm test` and `npm run build`, then update
 the Recorder submodule, build/runtime commit pins and packaged asset paths together.
 From the Recorder run `npm run quality`, `npm run inspector:build` and

@@ -37,6 +37,19 @@ describe('InspectorDriver actions', function () {
     await server.close();
   });
 
+  it('attaches to the existing mobile session and preserves element identity', async function () {
+    const attached = WDSessionStarter.attachToSession(
+      driver.sessionId,
+      {hostname: '127.0.0.1', port: FAKE_DRIVER_PORT, path: '/', connectionRetryCount: 0},
+      DEFAULT_CAPS,
+    );
+    expect(attached.sessionId).toBe(driver.sessionId);
+    expect(await attached.getPageSource()).toBe(await driver.getPageSource());
+    const originalElement = await driver.findElement('xpath', '//MockListItem');
+    const attachedElement = await attached.findElement('xpath', '//MockListItem');
+    expect(attachedElement.elementId).toBe(originalElement.elementId);
+  });
+
   describe('.fetchElement, .fetchElements', function () {
     it('should return empty object if selector is null', async function () {
       const res = await inspectorDriver.fetchElement({strategy: 'xpath', selctor: '//BadXPath'});
